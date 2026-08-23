@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ProxyFlow Service Mark Preview</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-synthesis: none;
+      --mark-size: 20px;
+      --badge-size: 32px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #182235;
+      background: #edf1f6;
+    }
+
+    .page-header {
+      display: flex;
+      gap: 24px;
+      align-items: end;
+      justify-content: space-between;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 36px 28px 22px;
+    }
+
+    .eyebrow,
+    .board-kicker {
+      margin: 0 0 6px;
+      color: #59708e;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: #172033;
+      font-size: clamp(26px, 4vw, 38px);
+      font-weight: 680;
+      letter-spacing: -.035em;
+    }
+
+    .intro {
+      max-width: 650px;
+      margin: 10px 0 0;
+      color: #65758b;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .size-picker {
+      flex: 0 0 auto;
+      min-width: 250px;
+      padding: 12px;
+      border: 1px solid #d7dee8;
+      border-radius: 12px;
+      background: #f8fafc;
+    }
+
+    .size-picker legend {
+      padding: 0 4px;
+      color: #66768c;
+      font-size: 11px;
+      font-weight: 650;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .size-options {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    .size-picker input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .size-picker label {
+      display: grid;
+      min-height: 32px;
+      place-items: center;
+      border: 1px solid transparent;
+      border-radius: 7px;
+      color: #53657d;
+      background: #eef2f7;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .size-picker label:hover { background: #e4ecf7; }
+    .size-picker input:focus-visible + label { outline: 2px solid #2563eb; outline-offset: 2px; }
+    .size-picker input:checked + label { border-color: #6b9df4; color: #1d4ed8; background: #e3edff; }
+
+    body:has(#size-16:checked) .preview { --mark-size: 16px; --badge-size: 28px; }
+    body:has(#size-20:checked) .preview { --mark-size: 20px; --badge-size: 32px; }
+    body:has(#size-24:checked) .preview { --mark-size: 24px; --badge-size: 36px; }
+    body:has(#size-32:checked) .preview { --mark-size: 32px; --badge-size: 48px; }
+
+    .preview {
+      display: grid;
+      gap: 18px;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 28px 36px;
+    }
+
+    .theme-board {
+      overflow: hidden;
+      border: 1px solid var(--board-border);
+      border-radius: 18px;
+      color: var(--text);
+      background: var(--board);
+    }
+
+    .theme-board.light {
+      --board: #fbfcfe;
+      --board-border: #dce3ec;
+      --card: #ffffff;
+      --card-border: #e4e9f0;
+      --text: #1d293b;
+      --muted: #718096;
+      --badge-default: #f0f4f8;
+      --badge-hover: #e6f0ff;
+      --badge-selected: #dce9ff;
+      --icon-default: #405a78;
+      --icon-hover: #2d6fd6;
+      --icon-selected: #1d5fc2;
+      --outline: #4f8bea;
+      --mono: #171b22;
+    }
+
+    .theme-board.dark {
+      --board: #101722;
+      --board-border: #273346;
+      --card: #151e2b;
+      --card-border: #273346;
+      --text: #e7edf6;
+      --muted: #8fa0b6;
+      --badge-default: #202b3a;
+      --badge-hover: #26354a;
+      --badge-selected: #243650;
+      --icon-default: #d3deeb;
+      --icon-hover: #a7c9ff;
+      --icon-selected: #c4dcff;
+      --outline: #4a8df0;
+      --mono: #f5f7fa;
+    }
+
+    .board-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 20px 22px 16px;
+      border-bottom: 1px solid var(--board-border);
+    }
+
+    .board-kicker { color: var(--muted); }
+
+    .board-header h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 650;
+      letter-spacing: -.015em;
+    }
+
+    .board-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      padding: 12px;
+    }
+
+    .service-card {
+      min-width: 0;
+      padding: 14px;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      background: var(--card);
+    }
+
+    .service-card > header {
+      display: flex;
+      min-height: 34px;
+      align-items: start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .service-card h3 {
+      margin: 0;
+      overflow: hidden;
+      font-size: 13px;
+      font-weight: 650;
+      letter-spacing: -.01em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .mode {
+      flex: 0 0 auto;
+      margin-top: 1px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .states {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 5px;
+      margin: 8px 0 0;
+    }
+
+    .sample {
+      display: grid;
+      min-width: 0;
+      gap: 7px;
+      place-items: center;
+      margin: 0;
+    }
+
+    .badge {
+      display: grid;
+      width: var(--badge-size);
+      height: var(--badge-size);
+      place-items: center;
+      border-radius: calc(var(--badge-size) / 4);
+      color: var(--icon-default);
+      background: var(--badge-default);
+      transition: background-color 120ms ease, color 120ms ease, outline-color 120ms ease;
+    }
+
+    .badge.hover { color: var(--icon-hover); background: var(--badge-hover); }
+    .badge.selected { color: var(--icon-selected); background: var(--badge-selected); outline: 1px solid var(--outline); outline-offset: -1px; }
+
+    .sample figcaption {
+      max-width: 100%;
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 9px;
+      line-height: 1;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .mark {
+      display: block;
+      width: var(--mark-size);
+      height: var(--mark-size);
+      flex: 0 0 auto;
+    }
+
+    img.mark { object-fit: contain; }
+
+    .mark.mask {
+      background: currentColor;
+      -webkit-mask: var(--asset) center / contain no-repeat;
+      mask: var(--asset) center / contain no-repeat;
+    }
+
+    [data-service="openai"] .mask { --asset: url("openai.svg"); }
+    [data-service="youtube"] .mask { --asset: url("youtube.svg"); }
+    [data-service="disney"] .mask { --asset: url("disney.svg"); }
+    [data-service="github"] .mask { --asset: url("github.svg"); }
+    [data-service="steam"] .mask { --asset: url("steam.svg"); }
+
+    .theme-board [data-service="openai"],
+    .theme-board [data-service="youtube"],
+    .theme-board [data-service="disney"],
+    .theme-board [data-service="github"],
+    .theme-board [data-service="steam"] {
+      --icon-default: var(--mono);
+      --icon-hover: var(--mono);
+      --icon-selected: var(--mono);
+    }
+
+    [data-service="openai"] .mark { width: calc(var(--mark-size) * .94); height: calc(var(--mark-size) * .94); }
+    [data-service="claude"] .mark { width: calc(var(--mark-size) * .90); height: calc(var(--mark-size) * .90); }
+    [data-service="google"] .mark { width: calc(var(--mark-size) * 1.05); height: calc(var(--mark-size) * 1.05); }
+    [data-service="gemini"] .mark { width: calc(var(--mark-size) * .88); height: calc(var(--mark-size) * .88); }
+    [data-service="youtube"] .mark { width: calc(var(--mark-size) * 1.08); height: calc(var(--mark-size) * .78); }
+    [data-service="netflix"] .mark { width: calc(var(--mark-size) * 1.35); height: calc(var(--mark-size) * .54); }
+    [data-service="disney"] .mark { width: calc(var(--mark-size) * 1.34); height: calc(var(--mark-size) * .75); }
+    [data-service="telegram"] .mark { width: calc(var(--mark-size) * .94); height: calc(var(--mark-size) * .94); }
+    [data-service="github"] .mark { width: calc(var(--mark-size) * .94); height: calc(var(--mark-size) * .94); }
+    [data-service="steam"] .mark { width: calc(var(--mark-size) * .98); height: calc(var(--mark-size) * .98); }
+
+    .preview-footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      max-width: 1440px;
+      margin: -18px auto 0;
+      padding: 0 28px 34px;
+      color: #607189;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .preview-footer strong { color: #354860; }
+
+    @media (max-width: 1120px) {
+      .service-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 760px) {
+      .page-header { align-items: stretch; flex-direction: column; padding: 26px 16px 18px; }
+      .size-picker { min-width: 0; }
+      .preview { padding: 0 16px 28px; }
+      .service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .board-header { align-items: start; flex-direction: column; }
+      .preview-footer { margin-top: -10px; padding: 0 16px 28px; }
+    }
+
+    @media (max-width: 470px) {
+      .service-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Asset QA · 10 services</p>
+      <h1>ProxyFlow Service Marks</h1>
+      <p class="intro">Compare optical weight, alignment, state clarity, and brand-color exceptions across both themes. Monochrome brand marks stay on their approved neutral palette while badge state carries ProxyFlow blue.</p>
+    </div>
+    <fieldset class="size-picker">
+      <legend>Logo inspection size</legend>
+      <div class="size-options">
+        <input id="size-16" name="size" type="radio"><label for="size-16">16px</label>
+        <input id="size-20" name="size" type="radio" checked><label for="size-20">20px</label>
+        <input id="size-24" name="size" type="radio"><label for="size-24">24px</label>
+        <input id="size-32" name="size" type="radio"><label for="size-32">32px</label>
+      </div>
+    </fieldset>
+  </header>
+
+  <main class="preview">
+    <section class="theme-board light" aria-labelledby="light-title">
+      <header class="board-header">
+        <div><p class="board-kicker">Light theme</p><h2 id="light-title">Default, Hover, Selected</h2></div>
+        <p class="board-note">Soft gray-blue surfaces · restrained blue state</p>
+      </header>
+      <div class="service-grid">
+        <article class="service-card" data-service="openai"><header><h3>OpenAI</h3><span class="mode">Mono</span></header><div class="states"><figure class="sample"><span class="badge"><span class="mark mask" role="img" aria-label="OpenAI"></span></span><figcaption>Default</figcaption></figure><figure class="sample"><span class="badge hover"><span class="mark mask" role="img" aria-label="OpenAI"></span></span><figcaption>Hover</figcaption></figure><figure class="sample"><span class="badge selected"><span class="mark mask" role="img" aria-label="OpenAI"></span></span><figcaption>Selected</figcaption></figure></div></article>
+        <article class="service-card" data-service="claude"><header><h3>Claude</h3><span class="mode">Fixed</span></header><div class="states"><figure class="sample"><span class="badge"><img class="mark" src="claude.svg" alt="Claude"></span><figcaption>Default</figcaption></figure><figure class="sample"><span class="badge hover"><img class="mark" src="claude.svg" alt="Claude"></span><figcaption>Hover</figcaption></figure><figure class="sample"><span class="badge selected"><img class="mark" src="claude.svg" alt="Claude"></span><figcaption>Selected</figcaption></figure></div></article>
+        <article class="service-card" data-service="google"><header><h3>Google</h3><span class="mode">Fixed</span></header><div class="states"><figure class="sample"><span class="badge"><img class="mark" src="google.svg" alt="Google"></span><figcaption>Default</figcaption></figure><figure class="sample"><span class="badge hover"><img class="mark" src="google.svg" alt="Google"></span><figcaption>Hover</figcaption></figure><figure class="sample"><span class="badge selected"><img class="mark" src="google.svg" alt="Google"></span><figcaption>Selected</figcaption></figure></div></article>
+        <article class="service-card" data-service="gemini"><header><h3>Gemini</h3><span class="mode">Fixed</span></header><div class="states"><figure class="sample"><span class="badge"><img class="mark" src="gemini.svg" alt="Gemini"></span><figcaption>Default</figcaption></figure><figure class="sample"><span class="badge hover"><img class="mark" src="gemini.svg" alt="Gemini"></span><figcaption>Hover</figcaption></figure><figure class="sample"><span class="badge selected"><img class="mark" src="gemini.svg" alt="Gemini"></span><figcaption>Selected</figcaption></figure></div></article>
+        <article class="service-card" data-service="youtube"><header><h3>YouTube</h3><span class="mode">Mono</span></header><div class="states"><figure class="sample"><span class="badge"><span class="mark mask" role="img" aria-label="YouTube"></span></span><figcaption>Default</figcaption></figure><figure class="sample"><span class="badge hover"><span class="mark mask" role="img" aria-label="YouTube"></span></span><figcaption>Hover</figcaption></figure><figure class="sample"><span class="badge selected"><span class="mark mask" role="img" aria-label="YouTube"></span></span><figcaption>Selected</figcaption></figure></div></article>
+        <article class="service-card" data-service="netflix"><header><h3>Netflix</h3><span class="mode">Fixed</span></header><div class="states"><figure class="sample"><span class="badge"><img class="mark" src="netflix.svg" alt="Netflix"></span><figcaption>Default</figcaption></figure><figure class="sample"><span class="badge hover"><img class="mark" src="netflix.svg" alt="Netflix"></span><figcaption>Hover</figcaption></figure><figure class="sample"><span class="badge selected"><img class="mark" src="netflix.svg" alt="Netflix"></span><figcaption>Selected</figcaption></figure></div></article>
+        <article class="service-card" data-service="disney"><header><h3>Disney+</h3><span class="mode">Mono</span></header><div class="states"><figure class="sample"><span class="badge"><span class="mark mask" role="img" aria-label="Disney+"></span></span><figcaption>Default</figcaption></figure><figure class="sample"><span class="badge hover"><span class="mark mask" role="img" aria-label="Disney+"></span></span><figcaption>Hover</figcaption></figure><figure class="sample"><span class="badge selected"><span class="mark mask" role="img" aria-label="Disney+"></span></span><figcaption>Selected</figcaption></figure></div></article>
+        <article class="service-card" data-service="telegram"><header><h3>Telegram</h3><span class="mode">Fixed</span></header><div class="states"><figure class="sample"><span class="badge"><img class="mark" src="telegram.svg" alt="Telegram"></span><figcaption>Default</figcaption></figure><figure class="sample"><span class="badge hover"><img class="mark" src="telegram.svg" alt="Telegram"></span><figcaption>Hover</figcaption></figure><figure class="sample"><span class="badge selected"><img class="mark" src="telegram.svg" alt="Telegram"></span><figcaption>Selected</figcaption></figure></div></article>
+        <article class="service-card" data-service="github"><header><h3>GitHub</h3><span class="mode">Mono</span></header><div class="states"><figure class="sample"><span class="badge"><span class="mark mask" role="img" aria-label="GitHub"></span></span><figcaption>Default</figcaption></figure><figure class="sample"><span class="badge hover"><span class="mark mask" role="img" aria-label="GitHub"></span></span><figcaption>Hover</figcaption></figure><figure class="sample"><span class="badge selected"><span class="mark mask" role="img" aria-label="GitHub"></span></span><figcaption>Selected</figcaption></figure></div></article>
+        <article class="service-card" data-service="steam"><header><h3>Steam</h3><span class="mode">Mono</span></header><div class="states"><figure class="sample"><span class="badge"><span class="mark mask" role="img" aria-label="Steam"></span></span><figcaption>Default</figcaption></figure><figure class="sample"><span class="badge hover"><span class="mark mask" role="img" aria-label="Steam"></span></span><figcaption>Hover</figcaption></figure><figure class="sample"><span class="badge selected"><span class="mark mask" role="img" aria-label="Steam"></span></span><figcaption>Selected</figcaption></figure></div></article>
+      </div>
+    </section>
+
+    <section class="theme-board dark" aria-labelledby="dark-title">
+      <header class="board-header">
+        <div><p class="board-kicker">Dark theme</p><h2 id="dark-title">Default, Hover, Selected</h2></div>
+        <p class="board-note">Dark slate surfaces · light marks · blue outline</p>
+      </header>
+      <div class="service-grid">
+        <article class="service-card" data-service="openai"><header><h3>OpenAI</h3><span class="mode">Mono</span></header><div class="states"><figure class="sample"><span class="badge"><span class="mark mask" role="img" aria-label="OpenAI"></span></span><figcaption>Default</figcaption></figure><figure class="sample"><span class="badge hover"><span class="mark mask" role="img" aria-label="OpenAI"></span></span><figcaption>Hover</figcaption></figure><figure class="sample"><span class="badge selected"><span class="mark mask" role="img" aria-label="OpenAI"></span></span><figcaption>Selected</figcaption></figure></div></article>
+        <article class="service-card" data-service="claude"><header><h3>Claude</h3><span class="mode">Fixed</span></header><div class="states"><figure class="sample"><span class="badge"><img class="mark" src="claude.svg" alt="Claude"></span><figcaption>Default</figcaption></figure><figure class="sample"><span class="badge hover"><img class="mark" src="claude.svg" alt="Claude"></span><figcaption>Hover</figcaption></figure><figure class="sample"><span class="badge selected"><img class="mark" src="claude.svg" alt="Claude"></span><figcaption>Selected</figcaption></figure></div></article>
+        <article class="service-card" data-service="google"><header><h3>Google</h3><span class="mode">Fixed</span></header><div class="states"><figure class="sample"><span class="badge"><img class="mark" src="google.svg" alt="Google"></span><figcaption>Default</figcaption></figure><figure class="sample"><span class="badge hover"><img class="mark" src="google.svg" alt="Google"></span><figcaption>Hover</figcaption></figure><figure class="sample"><span class="badge selected"><img class="mark" src="google.svg" alt="Google"></span><figcaption>Selected</figcaption></figure></div></article>
+        <article class="service-card" data-service="gemini"><header><h3>Gemini</h3><span class="mode">Fixed</span></header><div class="states"><figure class="sample"><span class="badge"><img class="mark" src="gemini.svg" alt="Gemini"></span><figcaption>Default</figcaption></figure><figure class="sample"><span class="badge hover"><img class="mark" src="gemini.svg" alt="Gemini"></span><figcaption>Hover</figcaption></figure><figure class="sample"><span class="badge selected"><img class="mark" src="gemini.svg" alt="Gemini"></span><figcaption>Selected</figcaption></figure></div></article>
+        <article class="service-card" data-service="youtube"><header><h3>YouTube</h3><span class="mode">Mono</span></header><div class="states"><figure class="sample"><span class="badge"><span class="mark mask" role="img" aria-label="YouTube"></span></span><figcaption>Default</figcaption></figure><figure class="sample"><span class="badge hover"><span class="mark mask" role="img" aria-label="YouTube"></span></span><figcaption>Hover</figcaption></figure><figure class="sample"><span class="badge selected"><span class="mark mask" role="img" aria-label="YouTube"></span></span><figcaption>Selected</figcaption></figure></div></article>
+        <article class="service-card" data-service="netflix"><header><h3>Netflix</h3><span class="mode">Fixed</span></header><div class="states"><figure class="sample"><span class="badge"><img class="mark" src="netflix.svg" alt="Netflix"></span><figcaption>Default</figcaption></figure><figure class="sample"><span class="badge hover"><img class="mark" src="netflix.svg" alt="Netflix"></span><figcaption>Hover</figcaption></figure><figure class="sample"><span class="badge selected"><img class="mark" src="netflix.svg" alt="Netflix"></span><figcaption>Selected</figcaption></figure></div></article>
+        <article class="service-card" data-service="disney"><header><h3>Disney+</h3><span class="mode">Mono</span></header><div class="states"><figure class="sample"><span class="badge"><span class="mark mask" role="img" aria-label="Disney+"></span></span><figcaption>Default</figcaption></figure><figure class="sample"><span class="badge hover"><span class="mark mask" role="img" aria-label="Disney+"></span></span><figcaption>Hover</figcaption></figure><figure class="sample"><span class="badge selected"><span class="mark mask" role="img" aria-label="Disney+"></span></span><figcaption>Selected</figcaption></figure></div></article>
+        <article class="service-card" data-service="telegram"><header><h3>Telegram</h3><span class="mode">Fixed</span></header><div class="states"><figure class="sample"><span class="badge"><img class="mark" src="telegram.svg" alt="Telegram"></span><figcaption>Default</figcaption></figure><figure class="sample"><span class="badge hover"><img class="mark" src="telegram.svg" alt="Telegram"></span><figcaption>Hover</figcaption></figure><figure class="sample"><span class="badge selected"><img class="mark" src="telegram.svg" alt="Telegram"></span><figcaption>Selected</figcaption></figure></div></article>
+        <article class="service-card" data-service="github"><header><h3>GitHub</h3><span class="mode">Mono</span></header><div class="states"><figure class="sample"><span class="badge"><span class="mark mask" role="img" aria-label="GitHub"></span></span><figcaption>Default</figcaption></figure><figure class="sample"><span class="badge hover"><span class="mark mask" role="img" aria-label="GitHub"></span></span><figcaption>Hover</figcaption></figure><figure class="sample"><span class="badge selected"><span class="mark mask" role="img" aria-label="GitHub"></span></span><figcaption>Selected</figcaption></figure></div></article>
+        <article class="service-card" data-service="steam"><header><h3>Steam</h3><span class="mode">Mono</span></header><div class="states"><figure class="sample"><span class="badge"><span class="mark mask" role="img" aria-label="Steam"></span></span><figcaption>Default</figcaption></figure><figure class="sample"><span class="badge hover"><span class="mark mask" role="img" aria-label="Steam"></span></span><figcaption>Hover</figcaption></figure><figure class="sample"><span class="badge selected"><span class="mark mask" role="img" aria-label="Steam"></span></span><figcaption>Selected</figcaption></figure></div></article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="preview-footer">
+    <span><strong>Mono</strong> = official neutral mark, palette restricted by brand guidance.</span>
+    <span><strong>Fixed</strong> = official color retained; badge treatment carries interaction state.</span>
+    <span>QA only · no external dependencies or product integration.</span>
+  </footer>
+</body>
+</html>
