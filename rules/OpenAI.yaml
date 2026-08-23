@@ -1,0 +1,12 @@
+# ProxyFlow Rules
+# Service: OpenAI
+# Maintained by ProxyFlow
+# Format: Mihomo classical rule-provider
+
+payload:
+  - DOMAIN-SUFFIX,openai.com
+  - DOMAIN-SUFFIX,chatgpt.com
+  - DOMAIN-SUFFIX,oaistatic.com
+  - DOMAIN-SUFFIX,oaiusercontent.com
+  - DOMAIN-SUFFIX,oaistatsig.com
+  - DOMAIN-SUFFIX,openaimerge.com

@@ -1,0 +1,10 @@
+# ProxyFlow Rules
+# Service: Gemini
+# Maintained by ProxyFlow
+# Format: Mihomo classical rule-provider
+
+payload:
+  - DOMAIN,gemini.google.com
+  - DOMAIN-SUFFIX,gemini.google
+  - DOMAIN,aistudio.google.com
+  - DOMAIN,generativelanguage.googleapis.com

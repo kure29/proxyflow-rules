@@ -1,0 +1,13 @@
+# ProxyFlow Rules
+# Service: YouTube
+# Maintained by ProxyFlow
+# Format: Mihomo classical rule-provider
+
+payload:
+  - DOMAIN-SUFFIX,youtube.com
+  - DOMAIN-SUFFIX,youtu.be
+  - DOMAIN-SUFFIX,googlevideo.com
+  - DOMAIN-SUFFIX,ytimg.com
+  - DOMAIN-SUFFIX,youtube-nocookie.com
+  - DOMAIN,youtube.googleapis.com
+  - DOMAIN,youtubei.googleapis.com

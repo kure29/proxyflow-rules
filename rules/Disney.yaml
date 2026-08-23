@@ -1,0 +1,13 @@
+# ProxyFlow Rules
+# Service: Disney+
+# Maintained by ProxyFlow
+# Format: Mihomo classical rule-provider
+
+payload:
+  - DOMAIN-SUFFIX,disneyplus.com
+  - DOMAIN-SUFFIX,disney-plus.net
+  - DOMAIN,disney.api.edge.bamgrid.com
+  - DOMAIN,disney.connections.edge.bamgrid.com
+  - DOMAIN,disney.content.edge.bamgrid.com
+  - DOMAIN,disney.playback.edge.bamgrid.com
+  - DOMAIN-SUFFIX,dssott.com

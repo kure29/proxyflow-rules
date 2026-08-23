@@ -1,0 +1,12 @@
+# ProxyFlow Rules
+# Service: GitHub
+# Maintained by ProxyFlow
+# Format: Mihomo classical rule-provider
+
+payload:
+  - DOMAIN-SUFFIX,github.com
+  - DOMAIN-SUFFIX,github.dev
+  - DOMAIN-SUFFIX,github.io
+  - DOMAIN-SUFFIX,githubassets.com
+  - DOMAIN-SUFFIX,githubusercontent.com
+  - DOMAIN-SUFFIX,ghcr.io

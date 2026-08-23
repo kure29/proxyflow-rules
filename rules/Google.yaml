@@ -1,0 +1,12 @@
+# ProxyFlow Rules
+# Service: Google
+# Maintained by ProxyFlow
+# Format: Mihomo classical rule-provider
+
+payload:
+  - DOMAIN,google.com
+  - DOMAIN,www.google.com
+  - DOMAIN,accounts.google.com
+  - DOMAIN,www.googleapis.com
+  - DOMAIN,www.gstatic.com
+  - DOMAIN,ssl.gstatic.com
