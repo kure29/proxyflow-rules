@@ -148,6 +148,12 @@ Run the offline synthetic test suite:
 node --test tests/automation/*.test.mjs
 ```
 
+Run the same complete validation entry point used by both workflows:
+
+```sh
+node scripts/validate-all.mjs
+```
+
 `--details` prints normalized comparison entries only to the terminal. It does
 not add them to tracked state or the Draft PR summary.
 
@@ -155,13 +161,22 @@ not add them to tracked state or the Draft PR summary.
 
 `.github/workflows/validate-rules.yml` runs for pull requests, pushes to `main`,
 and manual dispatches. It checks generated-file freshness, validates all rule
-formats, runs the offline automation tests, and checks whitespace errors.
+formats, runs the offline automation tests, and checks whitespace errors. Both
+workflows call `scripts/validate-all.mjs`, so the validation command set has one
+maintained definition.
 
 `.github/workflows/rules-audit.yml` runs every Monday at 03:17 UTC and by manual
 dispatch. It performs the same validation before publishing audit state. When
 state is unchanged it creates no commit, branch update, or PR. When state
 changes it updates `automation/rule-audit` and creates or refreshes one Draft PR
 against `main`.
+
+Pushes and pull-request updates made with `GITHUB_TOKEN` normally do not start
+another workflow run. After a successful audit branch push and Draft PR update,
+the audit therefore dispatches `validate-rules.yml` explicitly with
+`ref: automation/rule-audit`. `workflow_dispatch` is an allowed recursion
+exception, and the resulting `Validate Rules` run is attached to that branch's
+current HEAD for independent visibility on the audit PR.
 
 The scheduled workflow enforces an output allowlist. Its commit may change only
 `automation/upstream-state.json`; it cannot modify canonical JSON, generated
@@ -173,7 +188,12 @@ automatically.
 
 The repository setting **Allow GitHub Actions to create and approve pull
 requests** must be enabled for the built-in `GITHUB_TOKEN` to open the Draft PR.
-The workflow does not approve, mark ready, merge, or release anything.
+The audit workflow grants the token `contents: write` for its state-only branch
+push, `pull-requests: write` for Draft PR maintenance, and `actions: write` only
+to dispatch branch validation. The validation workflow retains
+`contents: read`. Neither workflow uses a PAT, GitHub App, additional secret, or
+third-party action. The audit workflow does not approve, mark ready, merge, or
+release anything.
 
 ## License and provenance boundary
 

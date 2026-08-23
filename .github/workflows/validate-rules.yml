@@ -29,14 +29,5 @@ jobs:
         with:
           node-version: 22
 
-      - name: Check generated rules
-        run: node scripts/generate-rules.mjs --check
-
-      - name: Validate rules
-        run: node scripts/validate-rules.mjs
-
-      - name: Test automation
-        run: node --test tests/automation/*.test.mjs
-
-      - name: Check whitespace errors
-        run: git diff --check
+      - name: Validate repository
+        run: node scripts/validate-all.mjs

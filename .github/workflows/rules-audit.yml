@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  actions: write
   contents: write
   pull-requests: write
 
@@ -114,11 +115,7 @@ jobs:
 
       - name: Validate before publishing
         if: steps.changes.outputs.changed == 'true'
-        run: |
-          node scripts/generate-rules.mjs --check
-          node scripts/validate-rules.mjs
-          node --test tests/automation/*.test.mjs
-          git diff --check
+        run: node scripts/validate-all.mjs
 
       - name: Commit and push audit state
         if: steps.changes.outputs.changed == 'true'
@@ -173,3 +170,11 @@ jobs:
               --title "${PR_TITLE}" \
               --body-file "${RUNNER_TEMP}/rule-audit-pr.md"
           fi
+
+      - name: Dispatch validation for audit branch
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          AUDIT_BRANCH: automation/rule-audit
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: gh workflow run validate-rules.yml --ref "${AUDIT_BRANCH}"
