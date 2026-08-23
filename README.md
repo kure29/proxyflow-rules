@@ -106,12 +106,33 @@ The scripts use only Node.js built-in modules.
 node scripts/generate-rules.mjs
 node scripts/generate-rules.mjs --check
 node scripts/validate-rules.mjs
+node --test tests/automation/*.test.mjs
 ```
 
 The validator checks canonical JSON structure, matcher and host/CIDR syntax,
 classification and source references, uniqueness, exact client file matrices,
 per-client syntax, `no-resolve`, generated-file freshness, and semantic parity
 across all six targets.
+
+## Automated upstream audit
+
+The weekly audit reads official source URLs directly from the canonical service
+metadata and uses one policy-free community feed per service to discover review
+candidates. It fingerprints official content, normalizes the five supported
+matcher types, compares community candidates with canonical rules, and updates
+only `automation/upstream-state.json` when a semantic upstream change is found.
+
+The tracked state contains hashes and counts, never downloaded community rule
+bodies or a copied matcher list. A changed official page requests manual evidence
+review; it never adds or removes a rule. Community-only and canonical-only entries
+are also review information, not automatic decisions. See
+[`docs/automation.md`](docs/automation.md) for the state model, failure behavior,
+workflow permissions, and local commands.
+
+```sh
+node scripts/audit-upstreams.mjs --dry-run
+node scripts/audit-upstreams.mjs --dry-run --details
+```
 
 ## Audits and provenance
 
@@ -122,10 +143,10 @@ or route verification. Rejected candidates and their reasons are recorded next
 to the accepted scope.
 
 Community rule repositories may be used to discover candidates, but they are
-not accepted as final evidence and their rule files are not copied. In
-particular, the GPL-2.0 blackmatrix7 OpenAI list was reviewed only as a candidate
-index; every accepted overlap was independently confirmed from OpenAI's current
-documentation.
+not accepted as final evidence and their rule files are not copied. The
+GPL-2.0 blackmatrix7 feeds are read only as a community candidate index. Every
+rule accepted by ProxyFlow still requires independent evidence from an official
+source or a bounded network verification recorded in the canonical metadata.
 
 ## License
 
