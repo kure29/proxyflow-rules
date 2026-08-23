@@ -1,0 +1,11 @@
+# ProxyFlow generated rule set
+# Service: Gemini
+# Target: Quantumult X
+#
+# DO NOT EDIT.
+# Source: sources/services/Gemini.json
+
+HOST,gemini.google.com,Gemini
+HOST-SUFFIX,gemini.google,Gemini
+HOST,aistudio.google.com,Gemini
+HOST,generativelanguage.googleapis.com,Gemini

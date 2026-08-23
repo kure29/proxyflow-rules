@@ -1,0 +1,19 @@
+# ProxyFlow generated rule set
+# Service: Steam
+# Target: Quantumult X
+#
+# DO NOT EDIT.
+# Source: sources/services/Steam.json
+
+HOST-SUFFIX,steampowered.com,Steam
+HOST-SUFFIX,steamcommunity.com,Steam
+HOST-SUFFIX,steamgames.com,Steam
+HOST-SUFFIX,steam-chat.com,Steam
+HOST-SUFFIX,steamusercontent.com,Steam
+HOST-SUFFIX,steamcontent.com,Steam
+HOST-SUFFIX,steamstatic.com,Steam
+HOST-SUFFIX,steamserver.net,Steam
+HOST,steamcdn-a.akamaihd.net,Steam
+HOST,steamcommunity-a.akamaihd.net,Steam
+HOST,steamstore-a.akamaihd.net,Steam
+HOST,steamusercontent-a.akamaihd.net,Steam

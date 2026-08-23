@@ -1,0 +1,24 @@
+{
+  "service": "Google",
+  "sources": [
+    {
+      "id": "google-search",
+      "kind": "official-domain",
+      "url": "https://www.google.com/",
+      "description": "Google Search and account entry points."
+    },
+    {
+      "id": "google-hostname-allowlist",
+      "kind": "official-documentation",
+      "url": "https://support.google.com/a/answer/6334001",
+      "description": "Google's maintained hostname allowlist for Google services and infrastructure."
+    }
+  ],
+  "rules": [
+    { "type": "DOMAIN", "value": "google.com", "classification": "core", "evidence": "Google Search apex entry point.", "source": "google-search" },
+    { "type": "DOMAIN", "value": "www.google.com", "classification": "core", "evidence": "Primary Google Search web host.", "source": "google-search" },
+    { "type": "DOMAIN", "value": "accounts.google.com", "classification": "core", "evidence": "Google account authentication host.", "source": "google-hostname-allowlist" },
+    { "type": "DOMAIN-SUFFIX", "value": "googleapis.com", "classification": "official-dependency", "evidence": "Official Google API namespace; kept in Google rather than product-specific sets.", "source": "google-hostname-allowlist" },
+    { "type": "DOMAIN-SUFFIX", "value": "gstatic.com", "classification": "dedicated-infrastructure", "evidence": "Official Google static infrastructure namespace.", "source": "google-hostname-allowlist" }
+  ]
+}

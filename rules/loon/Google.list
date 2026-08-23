@@ -1,0 +1,12 @@
+# ProxyFlow generated rule set
+# Service: Google
+# Target: Loon
+#
+# DO NOT EDIT.
+# Source: sources/services/Google.json
+
+DOMAIN,google.com
+DOMAIN,www.google.com
+DOMAIN,accounts.google.com
+DOMAIN-SUFFIX,googleapis.com
+DOMAIN-SUFFIX,gstatic.com

@@ -1,0 +1,44 @@
+{
+  "service": "Telegram",
+  "sources": [
+    {
+      "id": "telegram-service",
+      "kind": "official-domain",
+      "url": "https://telegram.org/",
+      "description": "Official Telegram service and public web properties."
+    },
+    {
+      "id": "telegram-cidr",
+      "kind": "official-network-information",
+      "url": "https://core.telegram.org/resources/cidr.txt",
+      "description": "Telegram's official published IPv4 and IPv6 CIDR list."
+    },
+    {
+      "id": "telegram-datacenters",
+      "kind": "official-documentation",
+      "url": "https://core.telegram.org/api/datacenter",
+      "description": "Telegram API data-center behavior and dynamic endpoint guidance."
+    }
+  ],
+  "rules": [
+    { "type": "DOMAIN-SUFFIX", "value": "telegram.org", "classification": "core", "evidence": "Official Telegram web, API, and application namespace.", "source": "telegram-service" },
+    { "type": "DOMAIN-SUFFIX", "value": "t.me", "classification": "core", "evidence": "Official Telegram short-link namespace.", "source": "telegram-service" },
+    { "type": "DOMAIN-SUFFIX", "value": "telegram.me", "classification": "core", "evidence": "Official Telegram legacy link namespace.", "source": "telegram-service" },
+    { "type": "DOMAIN-SUFFIX", "value": "telegra.ph", "classification": "core", "evidence": "Official Telegraph publishing namespace.", "source": "telegram-service" },
+    { "type": "DOMAIN-SUFFIX", "value": "telegram-cdn.org", "classification": "dedicated-infrastructure", "evidence": "Telegram-branded CDN namespace verified through public DNS and registration.", "source": "telegram-service" },
+    { "type": "IP-CIDR", "value": "91.108.56.0/22", "classification": "dedicated-infrastructure", "evidence": "Published by Telegram in its official CIDR list.", "source": "telegram-cidr", "noResolve": true },
+    { "type": "IP-CIDR", "value": "91.108.4.0/22", "classification": "dedicated-infrastructure", "evidence": "Published by Telegram in its official CIDR list.", "source": "telegram-cidr", "noResolve": true },
+    { "type": "IP-CIDR", "value": "91.108.8.0/22", "classification": "dedicated-infrastructure", "evidence": "Published by Telegram in its official CIDR list.", "source": "telegram-cidr", "noResolve": true },
+    { "type": "IP-CIDR", "value": "91.108.16.0/22", "classification": "dedicated-infrastructure", "evidence": "Published by Telegram in its official CIDR list.", "source": "telegram-cidr", "noResolve": true },
+    { "type": "IP-CIDR", "value": "91.108.12.0/22", "classification": "dedicated-infrastructure", "evidence": "Published by Telegram in its official CIDR list.", "source": "telegram-cidr", "noResolve": true },
+    { "type": "IP-CIDR", "value": "149.154.160.0/20", "classification": "dedicated-infrastructure", "evidence": "Published by Telegram in its official CIDR list.", "source": "telegram-cidr", "noResolve": true },
+    { "type": "IP-CIDR", "value": "91.105.192.0/23", "classification": "dedicated-infrastructure", "evidence": "Published by Telegram in its official CIDR list.", "source": "telegram-cidr", "noResolve": true },
+    { "type": "IP-CIDR", "value": "91.108.20.0/22", "classification": "dedicated-infrastructure", "evidence": "Published by Telegram in its official CIDR list.", "source": "telegram-cidr", "noResolve": true },
+    { "type": "IP-CIDR", "value": "185.76.151.0/24", "classification": "dedicated-infrastructure", "evidence": "Published by Telegram in its official CIDR list.", "source": "telegram-cidr", "noResolve": true },
+    { "type": "IP-CIDR6", "value": "2001:b28:f23d::/48", "classification": "dedicated-infrastructure", "evidence": "Published by Telegram in its official CIDR list.", "source": "telegram-cidr", "noResolve": true },
+    { "type": "IP-CIDR6", "value": "2001:b28:f23f::/48", "classification": "dedicated-infrastructure", "evidence": "Published by Telegram in its official CIDR list.", "source": "telegram-cidr", "noResolve": true },
+    { "type": "IP-CIDR6", "value": "2001:67c:4e8::/48", "classification": "dedicated-infrastructure", "evidence": "Published by Telegram in its official CIDR list.", "source": "telegram-cidr", "noResolve": true },
+    { "type": "IP-CIDR6", "value": "2001:b28:f23c::/48", "classification": "dedicated-infrastructure", "evidence": "Published by Telegram in its official CIDR list.", "source": "telegram-cidr", "noResolve": true },
+    { "type": "IP-CIDR6", "value": "2a0a:f280::/32", "classification": "dedicated-infrastructure", "evidence": "Published by Telegram in its official CIDR list.", "source": "telegram-cidr", "noResolve": true }
+  ]
+}

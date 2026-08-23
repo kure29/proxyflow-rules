@@ -1,0 +1,11 @@
+# ProxyFlow generated rule set
+# Service: Claude
+# Target: Loon
+#
+# DO NOT EDIT.
+# Source: sources/services/Claude.json
+
+DOMAIN-SUFFIX,anthropic.com
+DOMAIN-SUFFIX,claude.ai
+DOMAIN-SUFFIX,claude.com
+DOMAIN-SUFFIX,claudeusercontent.com

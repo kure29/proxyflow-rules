@@ -1,0 +1,14 @@
+# ProxyFlow generated rule set
+# Service: YouTube
+# Target: Shadowrocket
+#
+# DO NOT EDIT.
+# Source: sources/services/YouTube.json
+
+DOMAIN-SUFFIX,youtube.com
+DOMAIN-SUFFIX,youtu.be
+DOMAIN-SUFFIX,googlevideo.com
+DOMAIN-SUFFIX,ytimg.com
+DOMAIN-SUFFIX,youtube-nocookie.com
+DOMAIN,youtube.googleapis.com
+DOMAIN,youtubei.googleapis.com

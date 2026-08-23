@@ -1,0 +1,14 @@
+# ProxyFlow generated rule set
+# Service: Disney
+# Target: Loon
+#
+# DO NOT EDIT.
+# Source: sources/services/Disney.json
+
+DOMAIN-SUFFIX,disneyplus.com
+DOMAIN-SUFFIX,disney-plus.net
+DOMAIN,disney.api.edge.bamgrid.com
+DOMAIN,disney.connections.edge.bamgrid.com
+DOMAIN,disney.content.edge.bamgrid.com
+DOMAIN,disney.playback.edge.bamgrid.com
+DOMAIN-SUFFIX,dssott.com

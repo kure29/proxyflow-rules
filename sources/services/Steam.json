@@ -1,0 +1,31 @@
+{
+  "service": "Steam",
+  "sources": [
+    {
+      "id": "steam-network-requirements",
+      "kind": "official-documentation",
+      "url": "https://help.steampowered.com/en/faqs/view/2EA8-4D75-DA21-31EB",
+      "description": "Steam's official network, proxy, and domain requirements."
+    },
+    {
+      "id": "steam-service",
+      "kind": "official-domain",
+      "url": "https://store.steampowered.com/",
+      "description": "Official Steam Store and independently verified Steam-branded service domains."
+    }
+  ],
+  "rules": [
+    { "type": "DOMAIN-SUFFIX", "value": "steampowered.com", "classification": "core", "evidence": "Official Steam store, API, and service namespace.", "source": "steam-network-requirements" },
+    { "type": "DOMAIN-SUFFIX", "value": "steamcommunity.com", "classification": "core", "evidence": "Official Steam Community namespace.", "source": "steam-network-requirements" },
+    { "type": "DOMAIN-SUFFIX", "value": "steamgames.com", "classification": "core", "evidence": "Official Steam games namespace in the proxy allowlist.", "source": "steam-network-requirements" },
+    { "type": "DOMAIN-SUFFIX", "value": "steam-chat.com", "classification": "core", "evidence": "Steam chat namespace verified through public DNS, certificates, and official client traffic.", "source": "steam-service" },
+    { "type": "DOMAIN-SUFFIX", "value": "steamusercontent.com", "classification": "dedicated-infrastructure", "evidence": "Official Steam user-content namespace.", "source": "steam-network-requirements" },
+    { "type": "DOMAIN-SUFFIX", "value": "steamcontent.com", "classification": "dedicated-infrastructure", "evidence": "Official Steam content delivery namespace.", "source": "steam-network-requirements" },
+    { "type": "DOMAIN-SUFFIX", "value": "steamstatic.com", "classification": "dedicated-infrastructure", "evidence": "Official Steam static asset namespace.", "source": "steam-network-requirements" },
+    { "type": "DOMAIN-SUFFIX", "value": "steamserver.net", "classification": "dedicated-infrastructure", "evidence": "Steam server namespace verified through public DNS, registration, and official client traffic.", "source": "steam-service" },
+    { "type": "DOMAIN", "value": "steamcdn-a.akamaihd.net", "classification": "official-dependency", "evidence": "Steam-specific Akamai CDN host, narrowed from the official broad Akamai requirement.", "source": "steam-network-requirements" },
+    { "type": "DOMAIN", "value": "steamcommunity-a.akamaihd.net", "classification": "official-dependency", "evidence": "Steam Community-specific Akamai asset host verified from official service pages.", "source": "steam-network-requirements" },
+    { "type": "DOMAIN", "value": "steamstore-a.akamaihd.net", "classification": "official-dependency", "evidence": "Steam Store-specific Akamai asset host verified through DNS and certificates.", "source": "steam-network-requirements" },
+    { "type": "DOMAIN", "value": "steamusercontent-a.akamaihd.net", "classification": "official-dependency", "evidence": "Steam user-content Akamai host verified from official service pages.", "source": "steam-network-requirements" }
+  ]
+}

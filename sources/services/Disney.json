@@ -1,0 +1,26 @@
+{
+  "service": "Disney",
+  "sources": [
+    {
+      "id": "disney-plus",
+      "kind": "official-domain",
+      "url": "https://www.disneyplus.com/",
+      "description": "Official Disney+ consumer service."
+    },
+    {
+      "id": "disney-streaming-network",
+      "kind": "independent-network-verification",
+      "url": "https://www.whois.com/whois/dssott.com",
+      "description": "Public registration, DNS, and certificate verification for Disney Streaming Services and BAMGrid hosts."
+    }
+  ],
+  "rules": [
+    { "type": "DOMAIN-SUFFIX", "value": "disneyplus.com", "classification": "core", "evidence": "Official Disney+ application namespace.", "source": "disney-plus" },
+    { "type": "DOMAIN-SUFFIX", "value": "disney-plus.net", "classification": "core", "evidence": "Disney+ configuration namespace verified through registration and service traffic.", "source": "disney-streaming-network" },
+    { "type": "DOMAIN", "value": "disney.api.edge.bamgrid.com", "classification": "dedicated-infrastructure", "evidence": "Disney-specific BAMGrid API host verified through DNS, certificates, and service traffic.", "source": "disney-streaming-network" },
+    { "type": "DOMAIN", "value": "disney.connections.edge.bamgrid.com", "classification": "dedicated-infrastructure", "evidence": "Disney-specific BAMGrid connection host verified through DNS, certificates, and service traffic.", "source": "disney-streaming-network" },
+    { "type": "DOMAIN", "value": "disney.content.edge.bamgrid.com", "classification": "dedicated-infrastructure", "evidence": "Disney-specific BAMGrid content host verified through DNS, certificates, and service traffic.", "source": "disney-streaming-network" },
+    { "type": "DOMAIN", "value": "disney.playback.edge.bamgrid.com", "classification": "dedicated-infrastructure", "evidence": "Disney-specific BAMGrid playback and license host verified through DNS, certificates, and service traffic.", "source": "disney-streaming-network" },
+    { "type": "DOMAIN-SUFFIX", "value": "dssott.com", "classification": "dedicated-infrastructure", "evidence": "Registered to Disney Enterprises and used by Disney Streaming Services.", "source": "disney-streaming-network" }
+  ]
+}

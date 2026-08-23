@@ -1,150 +1,206 @@
 #!/usr/bin/env node
 
-import { readdir, readFile } from 'node:fs/promises';
-import { isIP } from 'node:net';
+import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const supportedMatchers = new Set([
-  'DOMAIN',
-  'DOMAIN-SUFFIX',
-  'DOMAIN-KEYWORD',
-  'IP-CIDR',
-  'IP-CIDR6',
-]);
-
-const domainPattern = /^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/;
-const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
-const rulesDirectory = path.resolve(scriptDirectory, '..', 'rules', 'mihomo');
+import {
+  buildGeneratedFiles,
+  canonicalMatchers,
+  canonicalRuleText,
+  loadCanonicalServices,
+  repositoryRoot,
+  rulesDirectory,
+  serviceNames,
+  targets,
+} from './generate-rules.mjs';
 
 function fail(file, line, message) {
-  throw new Error(`${file}:${line}: ${message}`);
+  const location = path.relative(repositoryRoot, file);
+  throw new Error(`${location}:${line}: ${message}`);
 }
 
-function validateDomain(file, line, matcher, value) {
-  if (matcher === 'DOMAIN-KEYWORD') {
-    if (!value || /\s/.test(value)) {
-      fail(file, line, 'DOMAIN-KEYWORD requires one non-whitespace value');
+function parseCanonicalLine(file, lineNumber, line) {
+  const parts = line.split(',');
+  if (parts.some((part) => part !== part.trim())) {
+    fail(file, lineNumber, 'fields must not contain surrounding whitespace');
+  }
+  const [type, value, option] = parts;
+  if (!canonicalMatchers.has(type)) fail(file, lineNumber, `unsupported matcher: ${type || '(empty)'}`);
+  if (!value) fail(file, lineNumber, `${type} requires a value`);
+
+  const isIp = type === 'IP-CIDR' || type === 'IP-CIDR6';
+  if (isIp) {
+    if (parts.length !== 3 || option !== 'no-resolve') {
+      fail(file, lineNumber, `${type} must include exactly one no-resolve option`);
     }
-    return;
+  } else if (parts.length !== 2) {
+    fail(file, lineNumber, `${type} must contain exactly two fields`);
   }
 
-  if (!domainPattern.test(value)) {
-    fail(file, line, `${matcher} has an invalid domain: ${value}`);
-  }
+  return { type, value, noResolve: isIp };
 }
 
-function validateCidr(file, line, matcher, value) {
-  const slash = value.lastIndexOf('/');
-  if (slash <= 0 || slash === value.length - 1) {
-    fail(file, line, `${matcher} requires CIDR notation`);
-  }
-
-  const address = value.slice(0, slash);
-  const prefixText = value.slice(slash + 1);
-  const expectedVersion = matcher === 'IP-CIDR' ? 4 : 6;
-  const maxPrefix = expectedVersion === 4 ? 32 : 128;
-  const prefix = Number(prefixText);
-
-  if (isIP(address) !== expectedVersion) {
-    fail(file, line, `${matcher} has an invalid IP address: ${address}`);
-  }
-
-  if (!/^\d+$/.test(prefixText) || prefix < 0 || prefix > maxPrefix) {
-    fail(file, line, `${matcher} has an invalid prefix: ${prefixText}`);
-  }
-}
-
-function validateRule(file, line, rule) {
-  const parts = rule.split(',').map((part) => part.trim());
-  const [matcher, value, option] = parts;
-
-  if (!supportedMatchers.has(matcher)) {
-    fail(file, line, `unsupported matcher: ${matcher || '(empty)'}`);
-  }
-
-  if (!value) {
-    fail(file, line, `${matcher} requires a value`);
-  }
-
-  if (matcher.startsWith('IP-CIDR')) {
-    if (parts.length > 3 || (parts.length === 3 && option !== 'no-resolve')) {
-      fail(file, line, `${matcher} only supports the optional no-resolve flag`);
-    }
-    validateCidr(file, line, matcher, value);
-    return;
-  }
-
-  if (parts.length !== 2) {
-    fail(file, line, `${matcher} must contain exactly two comma-separated fields`);
-  }
-  validateDomain(file, line, matcher, value);
-}
-
-async function validateFile(file) {
-  const source = await readFile(path.join(rulesDirectory, file), 'utf8');
-  const lines = source.replaceAll('\r\n', '\n').split('\n');
-  const rules = [];
+function assertNoDuplicates(file, rules) {
   const seen = new Set();
+  for (const rule of rules) {
+    const identity = canonicalRuleText(rule);
+    if (seen.has(identity)) fail(file, rule.line, `duplicate rule: ${identity}`);
+    seen.add(identity);
+  }
+}
+
+async function parseYaml(file) {
+  const lines = (await readFile(file, 'utf8')).replaceAll('\r\n', '\n').split('\n');
+  const rules = [];
   let payloadSeen = false;
 
   for (const [index, rawLine] of lines.entries()) {
     const lineNumber = index + 1;
     const trimmed = rawLine.trim();
-
-    if (!trimmed || trimmed.startsWith('#')) {
-      continue;
-    }
+    if (!trimmed || trimmed.startsWith('#')) continue;
 
     if (rawLine === 'payload:') {
-      if (payloadSeen) {
-        fail(file, lineNumber, 'duplicate payload key');
-      }
+      if (payloadSeen) fail(file, lineNumber, 'duplicate payload key');
       payloadSeen = true;
       continue;
     }
-
-    if (!payloadSeen) {
-      fail(file, lineNumber, 'the only top-level key must be payload');
-    }
-
+    if (!payloadSeen) fail(file, lineNumber, 'the only top-level key must be payload');
     if (!rawLine.startsWith('  - ') || rawLine.slice(4) !== rawLine.slice(4).trim()) {
       fail(file, lineNumber, 'payload entries must use exactly "  - RULE"');
     }
+    rules.push({ ...parseCanonicalLine(file, lineNumber, rawLine.slice(4)), line: lineNumber });
+  }
 
-    const rule = rawLine.slice(4);
-    validateRule(file, lineNumber, rule);
+  if (!payloadSeen) fail(file, 1, 'missing payload key');
+  if (rules.length === 0) fail(file, 1, 'payload must be a non-empty array');
+  assertNoDuplicates(file, rules);
+  return rules;
+}
 
-    if (seen.has(rule)) {
-      fail(file, lineNumber, `duplicate rule: ${rule}`);
+async function parseList(file) {
+  const lines = (await readFile(file, 'utf8')).replaceAll('\r\n', '\n').split('\n');
+  const rules = [];
+  for (const [index, rawLine] of lines.entries()) {
+    const lineNumber = index + 1;
+    const line = rawLine.trim();
+    if (!line || line.startsWith('#')) continue;
+    if (line !== rawLine) fail(file, lineNumber, 'rule lines must not have surrounding whitespace');
+    rules.push({ ...parseCanonicalLine(file, lineNumber, line), line: lineNumber });
+  }
+  if (rules.length === 0) fail(file, 1, 'rule list must not be empty');
+  assertNoDuplicates(file, rules);
+  return rules;
+}
+
+const quantumultReverseType = new Map([
+  ['HOST', 'DOMAIN'],
+  ['HOST-SUFFIX', 'DOMAIN-SUFFIX'],
+  ['HOST-KEYWORD', 'DOMAIN-KEYWORD'],
+  ['IP-CIDR', 'IP-CIDR'],
+  ['IP6-CIDR', 'IP-CIDR6'],
+]);
+
+async function parseQuantumultX(file, service) {
+  const lines = (await readFile(file, 'utf8')).replaceAll('\r\n', '\n').split('\n');
+  const rules = [];
+  for (const [index, rawLine] of lines.entries()) {
+    const lineNumber = index + 1;
+    const line = rawLine.trim();
+    if (!line || line.startsWith('#')) continue;
+    if (line !== rawLine) fail(file, lineNumber, 'rule lines must not have surrounding whitespace');
+    const parts = line.split(',');
+    if (parts.some((part) => part !== part.trim())) fail(file, lineNumber, 'fields must not contain surrounding whitespace');
+    const [quantumultMatcher, value, policy, option] = parts;
+    const type = quantumultReverseType.get(quantumultMatcher);
+    if (!type) fail(file, lineNumber, `unsupported Quantumult X matcher: ${quantumultMatcher || '(empty)'}`);
+    if (!value) fail(file, lineNumber, `${quantumultMatcher} requires a value`);
+    if (policy !== service) fail(file, lineNumber, `policy placeholder must be ${service}`);
+    const isIp = type === 'IP-CIDR' || type === 'IP-CIDR6';
+    if (isIp) {
+      if (parts.length !== 4 || option !== 'no-resolve') fail(file, lineNumber, `${quantumultMatcher} must end with ${service},no-resolve`);
+    } else if (parts.length !== 3) {
+      fail(file, lineNumber, `${quantumultMatcher} must contain matcher, value, and policy`);
     }
-    seen.add(rule);
-    rules.push(rule);
+    rules.push({ type, value, noResolve: isIp, line: lineNumber });
   }
-
-  if (!payloadSeen) {
-    fail(file, 1, 'missing payload key');
-  }
-  if (rules.length === 0) {
-    fail(file, 1, 'payload must be a non-empty array');
-  }
-
-  return rules.length;
+  if (rules.length === 0) fail(file, 1, 'rule list must not be empty');
+  assertNoDuplicates(file, rules);
+  return rules;
 }
 
-const files = (await readdir(rulesDirectory))
-  .filter((file) => file.endsWith('.yaml'))
-  .sort((a, b) => a.localeCompare(b));
-
-if (files.length === 0) {
-  throw new Error('No rules/mihomo/*.yaml files found');
+function semanticRules(rules) {
+  return rules.map(({ type, value, noResolve }) => canonicalRuleText({ type, value, noResolve }));
 }
 
-let total = 0;
-for (const file of files) {
-  const count = await validateFile(file);
-  total += count;
-  console.log(`ok ${file} (${count} rules)`);
+function assertSameRules(file, actual, expected) {
+  const actualRules = semanticRules(actual);
+  const expectedRules = semanticRules(expected);
+  if (JSON.stringify(actualRules) !== JSON.stringify(expectedRules)) {
+    throw new Error(`${path.relative(repositoryRoot, file)}: semantic rules differ from canonical source`);
+  }
 }
 
-console.log(`Validated ${files.length} files and ${total} rules.`);
+const services = await loadCanonicalServices();
+const generatedFiles = buildGeneratedFiles(services);
+const parsedByTarget = new Map();
+
+for (const service of services) {
+  const grouped = service.rules.reduce((groups, rule) => {
+    (groups[rule.classification] ??= []).push(rule);
+    return groups;
+  }, {});
+  const summary = ['core', 'official-dependency', 'dedicated-infrastructure']
+    .map((classification) => `${classification}=${grouped[classification]?.length ?? 0}`)
+    .join(', ');
+  console.log(`ok canonical ${service.service} (${service.rules.length} rules; ${summary})`);
+}
+
+for (const target of targets) {
+  const directory = path.join(rulesDirectory, target.name);
+  const files = (await readdir(directory)).sort((a, b) => a.localeCompare(b));
+  const expectedFiles = serviceNames.map((service) => `${service}${target.extension}`).sort((a, b) => a.localeCompare(b));
+  if (JSON.stringify(files) !== JSON.stringify(expectedFiles)) {
+    throw new Error(`rules/${target.name} must contain exactly: ${expectedFiles.join(', ')}`);
+  }
+
+  const targetServices = new Map();
+  let targetCount = 0;
+  for (const service of services) {
+    const file = path.join(directory, `${service.service}${target.extension}`);
+    let parsed;
+    if (target.format === 'yaml') parsed = await parseYaml(file);
+    else if (target.format === 'quantumult-x') parsed = await parseQuantumultX(file, service.service);
+    else parsed = await parseList(file);
+    assertSameRules(file, parsed, service.rules);
+    targetServices.set(service.service, semanticRules(parsed));
+    targetCount += parsed.length;
+
+    const expectedContent = generatedFiles.get(file);
+    const actualContent = await readFile(file, 'utf8');
+    if (actualContent !== expectedContent) {
+      throw new Error(`${path.relative(repositoryRoot, file)}: generated file is stale`);
+    }
+  }
+  parsedByTarget.set(target.name, targetServices);
+  console.log(`ok ${target.name} (${files.length} files, ${targetCount} rules)`);
+}
+
+for (const service of serviceNames) {
+  const mihomo = parsedByTarget.get('mihomo').get(service);
+  const stash = parsedByTarget.get('stash').get(service);
+  if (JSON.stringify(mihomo) !== JSON.stringify(stash)) throw new Error(`${service}: Mihomo and Stash payloads differ`);
+
+  const surge = parsedByTarget.get('surge').get(service);
+  for (const target of ['loon', 'shadowrocket']) {
+    if (JSON.stringify(surge) !== JSON.stringify(parsedByTarget.get(target).get(service))) {
+      throw new Error(`${service}: Surge, Loon, and Shadowrocket bodies differ`);
+    }
+  }
+  if (JSON.stringify(mihomo) !== JSON.stringify(surge) || JSON.stringify(mihomo) !== JSON.stringify(parsedByTarget.get('quantumult-x').get(service))) {
+    throw new Error(`${service}: client outputs are not semantically equivalent`);
+  }
+}
+
+const rulesPerClient = services.reduce((sum, service) => sum + service.rules.length, 0);
+console.log('ok semantic parity (all six clients)');
+console.log('ok generated files are current');
+console.log(`Validated ${services.length} canonical services and ${generatedFiles.size} generated files (${rulesPerClient} rules per client).`);

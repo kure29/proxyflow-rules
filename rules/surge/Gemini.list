@@ -1,0 +1,11 @@
+# ProxyFlow generated rule set
+# Service: Gemini
+# Target: Surge
+#
+# DO NOT EDIT.
+# Source: sources/services/Gemini.json
+
+DOMAIN,gemini.google.com
+DOMAIN-SUFFIX,gemini.google
+DOMAIN,aistudio.google.com
+DOMAIN,generativelanguage.googleapis.com

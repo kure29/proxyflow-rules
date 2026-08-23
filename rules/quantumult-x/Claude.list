@@ -1,0 +1,11 @@
+# ProxyFlow generated rule set
+# Service: Claude
+# Target: Quantumult X
+#
+# DO NOT EDIT.
+# Source: sources/services/Claude.json
+
+HOST-SUFFIX,anthropic.com,Claude
+HOST-SUFFIX,claude.ai,Claude
+HOST-SUFFIX,claude.com,Claude
+HOST-SUFFIX,claudeusercontent.com,Claude

@@ -1,0 +1,23 @@
+{
+  "service": "Gemini",
+  "sources": [
+    {
+      "id": "gemini-web",
+      "kind": "official-domain",
+      "url": "https://gemini.google.com/",
+      "description": "Official Gemini web application."
+    },
+    {
+      "id": "gemini-api-reference",
+      "kind": "official-documentation",
+      "url": "https://ai.google.dev/api",
+      "description": "Official Gemini API endpoints and Google AI Studio entry point."
+    }
+  ],
+  "rules": [
+    { "type": "DOMAIN", "value": "gemini.google.com", "classification": "core", "evidence": "Official Gemini web application host.", "source": "gemini-web" },
+    { "type": "DOMAIN-SUFFIX", "value": "gemini.google", "classification": "core", "evidence": "Official Gemini-branded namespace.", "source": "gemini-web" },
+    { "type": "DOMAIN", "value": "aistudio.google.com", "classification": "core", "evidence": "Official Google AI Studio host.", "source": "gemini-api-reference" },
+    { "type": "DOMAIN", "value": "generativelanguage.googleapis.com", "classification": "core", "evidence": "Documented Gemini API service endpoint.", "source": "gemini-api-reference" }
+  ]
+}

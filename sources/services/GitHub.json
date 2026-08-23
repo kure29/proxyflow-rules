@@ -1,0 +1,25 @@
+{
+  "service": "GitHub",
+  "sources": [
+    {
+      "id": "github-restricted-network",
+      "kind": "official-documentation",
+      "url": "https://docs.github.com/en/get-started/using-github/allowing-access-to-githubs-services-from-a-restricted-network",
+      "description": "GitHub guidance for retrieving official service domains."
+    },
+    {
+      "id": "github-meta",
+      "kind": "official-network-information",
+      "url": "https://api.github.com/meta",
+      "description": "GitHub's live Meta API domain categories."
+    }
+  ],
+  "rules": [
+    { "type": "DOMAIN-SUFFIX", "value": "github.com", "classification": "core", "evidence": "Official GitHub website and API namespace in the Meta API.", "source": "github-meta" },
+    { "type": "DOMAIN-SUFFIX", "value": "github.dev", "classification": "core", "evidence": "Official GitHub web editor namespace in the website domain set.", "source": "github-meta" },
+    { "type": "DOMAIN-SUFFIX", "value": "github.io", "classification": "core", "evidence": "Official GitHub Pages namespace in the website domain set.", "source": "github-meta" },
+    { "type": "DOMAIN-SUFFIX", "value": "githubassets.com", "classification": "dedicated-infrastructure", "evidence": "Official GitHub static asset namespace in the Meta API.", "source": "github-meta" },
+    { "type": "DOMAIN-SUFFIX", "value": "githubusercontent.com", "classification": "dedicated-infrastructure", "evidence": "Official GitHub content namespace in the Meta API.", "source": "github-meta" },
+    { "type": "DOMAIN-SUFFIX", "value": "ghcr.io", "classification": "dedicated-infrastructure", "evidence": "Official GitHub Container Registry namespace in the Meta API.", "source": "github-meta" }
+  ]
+}
