@@ -1,0 +1,26 @@
+# ProxyFlow generated rule set
+# Service: Telegram
+# Target: Quantumult X
+#
+# DO NOT EDIT.
+# Source: sources/services/Telegram.json
+
+HOST-SUFFIX,telegram.org,Telegram
+HOST-SUFFIX,t.me,Telegram
+HOST-SUFFIX,telegram.me,Telegram
+HOST-SUFFIX,telegra.ph,Telegram
+HOST-SUFFIX,telegram-cdn.org,Telegram
+IP-CIDR,91.108.56.0/22,Telegram,no-resolve
+IP-CIDR,91.108.4.0/22,Telegram,no-resolve
+IP-CIDR,91.108.8.0/22,Telegram,no-resolve
+IP-CIDR,91.108.16.0/22,Telegram,no-resolve
+IP-CIDR,91.108.12.0/22,Telegram,no-resolve
+IP-CIDR,149.154.160.0/20,Telegram,no-resolve
+IP-CIDR,91.105.192.0/23,Telegram,no-resolve
+IP-CIDR,91.108.20.0/22,Telegram,no-resolve
+IP-CIDR,185.76.151.0/24,Telegram,no-resolve
+IP6-CIDR,2001:b28:f23d::/48,Telegram,no-resolve
+IP6-CIDR,2001:b28:f23f::/48,Telegram,no-resolve
+IP6-CIDR,2001:67c:4e8::/48,Telegram,no-resolve
+IP6-CIDR,2001:b28:f23c::/48,Telegram,no-resolve
+IP6-CIDR,2a0a:f280::/32,Telegram,no-resolve

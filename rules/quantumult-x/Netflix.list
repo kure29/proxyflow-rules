@@ -1,0 +1,14 @@
+# ProxyFlow generated rule set
+# Service: Netflix
+# Target: Quantumult X
+#
+# DO NOT EDIT.
+# Source: sources/services/Netflix.json
+
+HOST-SUFFIX,netflix.com,Netflix
+HOST-SUFFIX,netflix.net,Netflix
+HOST-SUFFIX,nflxext.com,Netflix
+HOST-SUFFIX,nflximg.com,Netflix
+HOST-SUFFIX,nflximg.net,Netflix
+HOST-SUFFIX,nflxso.net,Netflix
+HOST-SUFFIX,nflxvideo.net,Netflix

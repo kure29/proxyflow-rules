@@ -1,0 +1,39 @@
+{
+  "service": "OpenAI",
+  "sources": [
+    {
+      "id": "openai-network-recommendations",
+      "kind": "official-documentation",
+      "url": "https://help.openai.com/en/articles/9247338-network-recommendations-for-chatgpt-errors-on-web-and-apps",
+      "description": "OpenAI's current ChatGPT web and app network allowlist."
+    },
+    {
+      "id": "openai-api-reference",
+      "kind": "official-documentation",
+      "url": "https://platform.openai.com/docs/api-reference",
+      "description": "OpenAI API endpoint and feature documentation."
+    }
+  ],
+  "rules": [
+    { "type": "DOMAIN-SUFFIX", "value": "openai.com", "classification": "core", "evidence": "Official OpenAI service and API namespace.", "source": "openai-network-recommendations" },
+    { "type": "DOMAIN-SUFFIX", "value": "chatgpt.com", "classification": "core", "evidence": "Official ChatGPT web, app, and WebSocket namespace.", "source": "openai-network-recommendations" },
+    { "type": "DOMAIN-SUFFIX", "value": "oaistatic.com", "classification": "core", "evidence": "Official ChatGPT static asset namespace.", "source": "openai-network-recommendations" },
+    { "type": "DOMAIN-SUFFIX", "value": "oaiusercontent.com", "classification": "core", "evidence": "Official OpenAI user-content namespace.", "source": "openai-network-recommendations" },
+    { "type": "DOMAIN-SUFFIX", "value": "oaistatsig.com", "classification": "core", "evidence": "Official OpenAI Statsig namespace named in the allowlist.", "source": "openai-network-recommendations" },
+    { "type": "DOMAIN", "value": "cdn.openaimerge.com", "classification": "core", "evidence": "Exact OpenAI merge CDN host named in the allowlist.", "source": "openai-network-recommendations" },
+    { "type": "DOMAIN-SUFFIX", "value": "ct.sendgrid.net", "classification": "official-dependency", "evidence": "Officially required SendGrid tracking namespace.", "source": "openai-network-recommendations" },
+    { "type": "DOMAIN-SUFFIX", "value": "intercom.io", "classification": "official-dependency", "evidence": "Officially required Intercom namespace.", "source": "openai-network-recommendations" },
+    { "type": "DOMAIN-SUFFIX", "value": "intercomcdn.com", "classification": "official-dependency", "evidence": "Officially required Intercom asset namespace.", "source": "openai-network-recommendations" },
+    { "type": "DOMAIN", "value": "cdn.workos.com", "classification": "official-dependency", "evidence": "Exact WorkOS host named by OpenAI.", "source": "openai-network-recommendations" },
+    { "type": "DOMAIN", "value": "challenges.cloudflare.com", "classification": "official-dependency", "evidence": "Exact Cloudflare challenge host named by OpenAI.", "source": "openai-network-recommendations" },
+    { "type": "DOMAIN", "value": "forwarder.workos.com", "classification": "official-dependency", "evidence": "Exact WorkOS forwarder host named by OpenAI.", "source": "openai-network-recommendations" },
+    { "type": "DOMAIN", "value": "humb.apple.com", "classification": "official-dependency", "evidence": "Exact Apple host named by OpenAI.", "source": "openai-network-recommendations" },
+    { "type": "DOMAIN", "value": "images.workoscdn.com", "classification": "official-dependency", "evidence": "Exact WorkOS image host named by OpenAI.", "source": "openai-network-recommendations" },
+    { "type": "DOMAIN", "value": "js.stripe.com", "classification": "official-dependency", "evidence": "Exact Stripe JavaScript host named by OpenAI.", "source": "openai-network-recommendations" },
+    { "type": "DOMAIN", "value": "o207216.ingest.sentry.io", "classification": "official-dependency", "evidence": "Exact Sentry ingest tenant named by OpenAI.", "source": "openai-network-recommendations" },
+    { "type": "DOMAIN", "value": "o33249.ingest.sentry.io", "classification": "official-dependency", "evidence": "Exact Sentry ingest tenant named by OpenAI.", "source": "openai-network-recommendations" },
+    { "type": "DOMAIN", "value": "rum.browser-intake-datadoghq.com", "classification": "official-dependency", "evidence": "Exact Datadog RUM host named by OpenAI.", "source": "openai-network-recommendations" },
+    { "type": "DOMAIN", "value": "setup.workos.com", "classification": "official-dependency", "evidence": "Exact WorkOS setup host named by OpenAI.", "source": "openai-network-recommendations" },
+    { "type": "DOMAIN", "value": "workos.imgix.net", "classification": "official-dependency", "evidence": "Exact WorkOS Imgix host named by OpenAI.", "source": "openai-network-recommendations" }
+  ]
+}

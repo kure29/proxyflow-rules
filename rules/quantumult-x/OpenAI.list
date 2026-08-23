@@ -1,0 +1,27 @@
+# ProxyFlow generated rule set
+# Service: OpenAI
+# Target: Quantumult X
+#
+# DO NOT EDIT.
+# Source: sources/services/OpenAI.json
+
+HOST-SUFFIX,openai.com,OpenAI
+HOST-SUFFIX,chatgpt.com,OpenAI
+HOST-SUFFIX,oaistatic.com,OpenAI
+HOST-SUFFIX,oaiusercontent.com,OpenAI
+HOST-SUFFIX,oaistatsig.com,OpenAI
+HOST,cdn.openaimerge.com,OpenAI
+HOST-SUFFIX,ct.sendgrid.net,OpenAI
+HOST-SUFFIX,intercom.io,OpenAI
+HOST-SUFFIX,intercomcdn.com,OpenAI
+HOST,cdn.workos.com,OpenAI
+HOST,challenges.cloudflare.com,OpenAI
+HOST,forwarder.workos.com,OpenAI
+HOST,humb.apple.com,OpenAI
+HOST,images.workoscdn.com,OpenAI
+HOST,js.stripe.com,OpenAI
+HOST,o207216.ingest.sentry.io,OpenAI
+HOST,o33249.ingest.sentry.io,OpenAI
+HOST,rum.browser-intake-datadoghq.com,OpenAI
+HOST,setup.workos.com,OpenAI
+HOST,workos.imgix.net,OpenAI

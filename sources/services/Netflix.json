@@ -1,0 +1,32 @@
+{
+  "service": "Netflix",
+  "sources": [
+    {
+      "id": "netflix-service",
+      "kind": "official-domain",
+      "url": "https://www.netflix.com/",
+      "description": "Official Netflix consumer service."
+    },
+    {
+      "id": "netflix-network-help",
+      "kind": "official-documentation",
+      "url": "https://help.netflix.com/en/node/13197",
+      "description": "Netflix network troubleshooting and official service endpoints."
+    },
+    {
+      "id": "netflix-open-connect",
+      "kind": "official-network-information",
+      "url": "https://openconnect.netflix.com/",
+      "description": "Netflix Open Connect delivery architecture; dedicated nflx namespaces were also checked through public DNS and registration data."
+    }
+  ],
+  "rules": [
+    { "type": "DOMAIN-SUFFIX", "value": "netflix.com", "classification": "core", "evidence": "Official Netflix application, authentication, and device bootstrap namespace.", "source": "netflix-network-help" },
+    { "type": "DOMAIN-SUFFIX", "value": "netflix.net", "classification": "core", "evidence": "Netflix-owned service namespace verified through registration and DNS.", "source": "netflix-service" },
+    { "type": "DOMAIN-SUFFIX", "value": "nflxext.com", "classification": "dedicated-infrastructure", "evidence": "Netflix-owned external asset namespace verified through registration and DNS.", "source": "netflix-open-connect" },
+    { "type": "DOMAIN-SUFFIX", "value": "nflximg.com", "classification": "dedicated-infrastructure", "evidence": "Netflix image delivery namespace verified through registration and DNS.", "source": "netflix-open-connect" },
+    { "type": "DOMAIN-SUFFIX", "value": "nflximg.net", "classification": "dedicated-infrastructure", "evidence": "Netflix image delivery namespace verified through registration and DNS.", "source": "netflix-open-connect" },
+    { "type": "DOMAIN-SUFFIX", "value": "nflxso.net", "classification": "dedicated-infrastructure", "evidence": "Netflix service-origin namespace verified through registration and DNS.", "source": "netflix-open-connect" },
+    { "type": "DOMAIN-SUFFIX", "value": "nflxvideo.net", "classification": "dedicated-infrastructure", "evidence": "Netflix Open Connect video delivery namespace.", "source": "netflix-open-connect" }
+  ]
+}

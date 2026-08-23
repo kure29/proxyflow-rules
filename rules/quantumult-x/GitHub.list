@@ -1,0 +1,13 @@
+# ProxyFlow generated rule set
+# Service: GitHub
+# Target: Quantumult X
+#
+# DO NOT EDIT.
+# Source: sources/services/GitHub.json
+
+HOST-SUFFIX,github.com,GitHub
+HOST-SUFFIX,github.dev,GitHub
+HOST-SUFFIX,github.io,GitHub
+HOST-SUFFIX,githubassets.com,GitHub
+HOST-SUFFIX,githubusercontent.com,GitHub
+HOST-SUFFIX,ghcr.io,GitHub

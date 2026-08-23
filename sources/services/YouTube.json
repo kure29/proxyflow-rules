@@ -1,0 +1,32 @@
+{
+  "service": "YouTube",
+  "sources": [
+    {
+      "id": "youtube-web",
+      "kind": "official-domain",
+      "url": "https://www.youtube.com/",
+      "description": "Official YouTube web service and observed first-party delivery hosts."
+    },
+    {
+      "id": "youtube-embed",
+      "kind": "official-documentation",
+      "url": "https://support.google.com/youtube/answer/171780",
+      "description": "Official YouTube embed guidance, including privacy-enhanced embeds."
+    },
+    {
+      "id": "youtube-api",
+      "kind": "official-documentation",
+      "url": "https://developers.google.com/youtube/v3/docs",
+      "description": "Official YouTube Data API reference."
+    }
+  ],
+  "rules": [
+    { "type": "DOMAIN-SUFFIX", "value": "youtube.com", "classification": "core", "evidence": "Official YouTube application namespace.", "source": "youtube-web" },
+    { "type": "DOMAIN-SUFFIX", "value": "youtu.be", "classification": "core", "evidence": "Official YouTube short-link namespace.", "source": "youtube-web" },
+    { "type": "DOMAIN-SUFFIX", "value": "googlevideo.com", "classification": "dedicated-infrastructure", "evidence": "YouTube media delivery namespace verified from official service traffic.", "source": "youtube-web" },
+    { "type": "DOMAIN-SUFFIX", "value": "ytimg.com", "classification": "dedicated-infrastructure", "evidence": "YouTube image and static asset namespace used in official API examples.", "source": "youtube-api" },
+    { "type": "DOMAIN-SUFFIX", "value": "youtube-nocookie.com", "classification": "core", "evidence": "Official privacy-enhanced embed namespace.", "source": "youtube-embed" },
+    { "type": "DOMAIN", "value": "youtube.googleapis.com", "classification": "core", "evidence": "YouTube-specific Google API hostname verified through public DNS and certificates.", "source": "youtube-api" },
+    { "type": "DOMAIN", "value": "youtubei.googleapis.com", "classification": "core", "evidence": "YouTube internal application API hostname verified through official service traffic.", "source": "youtube-web" }
+  ]
+}

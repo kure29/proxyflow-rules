@@ -1,0 +1,23 @@
+{
+  "service": "Claude",
+  "sources": [
+    {
+      "id": "anthropic-corporate-proxy",
+      "kind": "official-documentation",
+      "url": "https://code.claude.com/docs/en/corporate-proxy",
+      "description": "Anthropic's enterprise proxy and network requirements."
+    },
+    {
+      "id": "anthropic-web-network",
+      "kind": "official-documentation",
+      "url": "https://code.claude.com/docs/en/claude-code-on-the-web",
+      "description": "Anthropic service domains used by Claude Code on the web."
+    }
+  ],
+  "rules": [
+    { "type": "DOMAIN-SUFFIX", "value": "anthropic.com", "classification": "core", "evidence": "Covers Anthropic API and official service hosts.", "source": "anthropic-corporate-proxy" },
+    { "type": "DOMAIN-SUFFIX", "value": "claude.ai", "classification": "core", "evidence": "Official Claude application and download namespace.", "source": "anthropic-corporate-proxy" },
+    { "type": "DOMAIN-SUFFIX", "value": "claude.com", "classification": "core", "evidence": "Official Claude platform, documentation, and code namespace.", "source": "anthropic-web-network" },
+    { "type": "DOMAIN-SUFFIX", "value": "claudeusercontent.com", "classification": "core", "evidence": "Official Claude content and bridge namespace.", "source": "anthropic-corporate-proxy" }
+  ]
+}

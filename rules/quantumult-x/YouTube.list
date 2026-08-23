@@ -1,0 +1,14 @@
+# ProxyFlow generated rule set
+# Service: YouTube
+# Target: Quantumult X
+#
+# DO NOT EDIT.
+# Source: sources/services/YouTube.json
+
+HOST-SUFFIX,youtube.com,YouTube
+HOST-SUFFIX,youtu.be,YouTube
+HOST-SUFFIX,googlevideo.com,YouTube
+HOST-SUFFIX,ytimg.com,YouTube
+HOST-SUFFIX,youtube-nocookie.com,YouTube
+HOST,youtube.googleapis.com,YouTube
+HOST,youtubei.googleapis.com,YouTube

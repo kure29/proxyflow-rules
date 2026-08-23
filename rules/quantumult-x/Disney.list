@@ -1,0 +1,14 @@
+# ProxyFlow generated rule set
+# Service: Disney
+# Target: Quantumult X
+#
+# DO NOT EDIT.
+# Source: sources/services/Disney.json
+
+HOST-SUFFIX,disneyplus.com,Disney
+HOST-SUFFIX,disney-plus.net,Disney
+HOST,disney.api.edge.bamgrid.com,Disney
+HOST,disney.connections.edge.bamgrid.com,Disney
+HOST,disney.content.edge.bamgrid.com,Disney
+HOST,disney.playback.edge.bamgrid.com,Disney
+HOST-SUFFIX,dssott.com,Disney

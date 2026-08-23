@@ -1,0 +1,12 @@
+# ProxyFlow generated rule set
+# Service: Google
+# Target: Quantumult X
+#
+# DO NOT EDIT.
+# Source: sources/services/Google.json
+
+HOST,google.com,Google
+HOST,www.google.com,Google
+HOST,accounts.google.com,Google
+HOST-SUFFIX,googleapis.com,Google
+HOST-SUFFIX,gstatic.com,Google
