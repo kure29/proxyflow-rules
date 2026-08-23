@@ -1,0 +1,175 @@
+name: Rules Audit
+
+on:
+  schedule:
+    - cron: '17 3 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: rules-audit
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    name: Audit upstream rule sources
+    if: github.repository == 'kure29/proxyflow-rules'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out main
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+
+      - name: Select audit state baseline
+        env:
+          AUDIT_BRANCH: automation/rule-audit
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          cp automation/upstream-state.json "${RUNNER_TEMP}/audit-state.json"
+
+          pr_number="$(
+            gh pr list \
+              --state open \
+              --base main \
+              --head "${AUDIT_BRANCH}" \
+              --json number \
+              --jq '.[0].number // empty'
+          )"
+
+          if [[ -n "${pr_number}" ]]; then
+            git fetch --no-tags origin \
+              "+refs/heads/${AUDIT_BRANCH}:refs/remotes/origin/${AUDIT_BRANCH}"
+            git show \
+              "refs/remotes/origin/${AUDIT_BRANCH}:automation/upstream-state.json" \
+              > "${RUNNER_TEMP}/audit-state.json"
+          fi
+
+          cp "${RUNNER_TEMP}/audit-state.json" "${RUNNER_TEMP}/audit-baseline.json"
+
+      - name: Audit upstreams
+        run: |
+          node scripts/audit-upstreams.mjs \
+            --output "${RUNNER_TEMP}/audit-state.json" \
+            --summary "${RUNNER_TEMP}/rule-audit-summary.md"
+
+      - name: Publish audit summary
+        if: always()
+        shell: bash
+        run: |
+          if [[ -f "${RUNNER_TEMP}/rule-audit-summary.md" ]]; then
+            cat "${RUNNER_TEMP}/rule-audit-summary.md" >> "${GITHUB_STEP_SUMMARY}"
+          fi
+
+      - name: Materialize changed audit state
+        id: changes
+        shell: bash
+        run: |
+          if cmp -s \
+            "${RUNNER_TEMP}/audit-baseline.json" \
+            "${RUNNER_TEMP}/audit-state.json"; then
+            echo "changed=false" >> "${GITHUB_OUTPUT}"
+            echo "No upstream audit state changed."
+          else
+            cp "${RUNNER_TEMP}/audit-state.json" automation/upstream-state.json
+            echo "changed=true" >> "${GITHUB_OUTPUT}"
+          fi
+
+      - name: Enforce audit write boundary
+        if: steps.changes.outputs.changed == 'true'
+        shell: bash
+        run: |
+          mapfile -t changed_files < <(
+            {
+              git diff --name-only
+              git diff --cached --name-only
+              git ls-files --others --exclude-standard
+            } | sort -u
+          )
+
+          for file in "${changed_files[@]}"; do
+            if [[ "${file}" != "automation/upstream-state.json" ]]; then
+              echo "Audit modified a forbidden path: ${file}" >&2
+              exit 1
+            fi
+          done
+
+          if [[ -z "$(git status --porcelain -- automation/upstream-state.json)" ]]; then
+            echo "Audit changed the active baseline but produced no diff from main." >&2
+            exit 1
+          fi
+
+      - name: Validate before publishing
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          node scripts/generate-rules.mjs --check
+          node scripts/validate-rules.mjs
+          node --test tests/automation/*.test.mjs
+          git diff --check
+
+      - name: Commit and push audit state
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          AUDIT_BRANCH: automation/rule-audit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch --no-tags origin \
+            "+refs/heads/${AUDIT_BRANCH}:refs/remotes/origin/${AUDIT_BRANCH}" || true
+          git switch -C "${AUDIT_BRANCH}"
+          git add -- automation/upstream-state.json
+          git commit -m "chore: update rule audit state"
+          git push --force-with-lease origin "HEAD:refs/heads/${AUDIT_BRANCH}"
+
+      - name: Create or update draft pull request
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          AUDIT_BRANCH: automation/rule-audit
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PR_TITLE: "chore: report rule upstream changes"
+        shell: bash
+        run: |
+          {
+            cat "${RUNNER_TEMP}/rule-audit-summary.md"
+            printf '\n%s\n' 'No canonical rule has been accepted or removed automatically.'
+          } > "${RUNNER_TEMP}/rule-audit-pr.md"
+
+          pr_number="$(
+            gh pr list \
+              --state open \
+              --base main \
+              --head "${AUDIT_BRANCH}" \
+              --json number \
+              --jq '.[0].number // empty'
+          )"
+
+          if [[ -n "${pr_number}" ]]; then
+            gh pr edit "${pr_number}" \
+              --title "${PR_TITLE}" \
+              --body-file "${RUNNER_TEMP}/rule-audit-pr.md"
+
+            if [[ "$(gh pr view "${pr_number}" --json isDraft --jq '.isDraft')" != "true" ]]; then
+              gh pr ready "${pr_number}" --undo
+            fi
+          else
+            gh pr create \
+              --draft \
+              --base main \
+              --head "${AUDIT_BRANCH}" \
+              --title "${PR_TITLE}" \
+              --body-file "${RUNNER_TEMP}/rule-audit-pr.md"
+          fi

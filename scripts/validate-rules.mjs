@@ -12,6 +12,10 @@ import {
   serviceNames,
   targets,
 } from './generate-rules.mjs';
+import {
+  validateAuditState,
+  validateUpstreamRegistry,
+} from './audit-upstreams.mjs';
 
 function fail(file, line, message) {
   const location = path.relative(repositoryRoot, file);
@@ -201,6 +205,14 @@ for (const service of serviceNames) {
 }
 
 const rulesPerClient = services.reduce((sum, service) => sum + service.rules.length, 0);
+const upstreamRegistryFile = path.join(repositoryRoot, 'sources', 'upstreams.json');
+const auditStateFile = path.join(repositoryRoot, 'automation', 'upstream-state.json');
+const upstreamRegistry = JSON.parse(await readFile(upstreamRegistryFile, 'utf8'));
+const auditState = JSON.parse(await readFile(auditStateFile, 'utf8'));
+validateUpstreamRegistry(upstreamRegistry, services);
+validateAuditState(auditState, services);
+
 console.log('ok semantic parity (all six clients)');
 console.log('ok generated files are current');
+console.log('ok automation registry and state metadata');
 console.log(`Validated ${services.length} canonical services and ${generatedFiles.size} generated files (${rulesPerClient} rules per client).`);
