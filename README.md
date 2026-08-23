@@ -2,6 +2,12 @@
 
 First-party routing rule sets maintained for ProxyFlow.
 
+Rules are organized by target proxy client.
+
+- Mihomo: available
+- Surge: not yet available
+- Loon: not yet available
+
 This repository contains the built-in service rules used by ProxyFlow. The
 initial release targets Mihomo `classical` rule-providers only. Rules describe
 what traffic matches a service; proxy groups and routing policy belong in the
@@ -20,7 +26,7 @@ rule-providers:
     type: http
     behavior: classical
     format: yaml
-    url: https://raw.githubusercontent.com/kure29/proxyflow-rules/main/rules/OpenAI.yaml
+    url: https://raw.githubusercontent.com/kure29/proxyflow-rules/main/rules/mihomo/OpenAI.yaml
 
 rules:
   - RULE-SET,openai,Proxy

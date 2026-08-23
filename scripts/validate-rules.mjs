@@ -15,7 +15,7 @@ const supportedMatchers = new Set([
 
 const domainPattern = /^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/;
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
-const rulesDirectory = path.resolve(scriptDirectory, '..', 'rules');
+const rulesDirectory = path.resolve(scriptDirectory, '..', 'rules', 'mihomo');
 
 function fail(file, line, message) {
   throw new Error(`${file}:${line}: ${message}`);
@@ -137,7 +137,7 @@ const files = (await readdir(rulesDirectory))
   .sort((a, b) => a.localeCompare(b));
 
 if (files.length === 0) {
-  throw new Error('No rules/*.yaml files found');
+  throw new Error('No rules/mihomo/*.yaml files found');
 }
 
 let total = 0;
