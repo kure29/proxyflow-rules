@@ -3,7 +3,7 @@
   "services": {
     "OpenAI": {
       "official": {
-        "openai-api-reference": "sha256:cae40253c22fed798b8cc7be6811f0435662c65db5f669d5318e010ced0d0802"
+        "openai-api-reference": "sha256:83caac2b6b5c5c88b8ad02eeec94125ded84566deb3cfbef43c796a3e0d98f34"
       },
       "community": {
         "sourceHash": "sha256:e78442477c8c3d2f2ba34bc26443774014f328d5f1ff9761f0ea37dfc1fb7331",
@@ -48,7 +48,7 @@
     },
     "Claude": {
       "official": {
-        "anthropic-corporate-proxy": "sha256:ea87e54bdde9bc0ed67d05810c7e2731db6da4eadeee7def4e11edcf4d7ca1d9",
+        "anthropic-corporate-proxy": "sha256:8511001d318e79c25c865c784300ac86c47f89712e58af668c4fa653def75a26",
         "anthropic-web-network": "sha256:9dfa3ca97e51118edab467ff9ed09a5e49fc18076a0ab3e5eedc496f2f86e008"
       },
       "community": {
@@ -63,7 +63,7 @@
     },
     "Google": {
       "official": {
-        "google-search": "sha256:68f16715b345803b7c3df91ea782d8b9a792d470cb146eed277fa5999c9ae5e7",
+        "google-search": "sha256:b6f9995070d6146e4071ad61fb4f5270b315967e3baffa66ab2fb7d5db78ecf5",
         "google-hostname-allowlist": "sha256:093788bfff2189b891ddc8d2981de2a1b4e6974378c85b21320f7100701dce65"
       },
       "community": {
@@ -794,7 +794,7 @@
     },
     "YouTube": {
       "official": {
-        "youtube-web": "sha256:2a8c6894b519cc7a2c912e3ae90b2e565b3c804241e51b2e3e1af4bd2a6ca961",
+        "youtube-web": "sha256:09b49b6f2ee081211cbb9d653a0243d89da289129ca73e6977f3446be15d2d69",
         "youtube-embed": "sha256:a8fa5e10bfd1e49e5ae412efb96ae435c954ccb620753d2814d8895f0d854aff",
         "youtube-api": "sha256:e96ff8e2bdc004770939572f4dc4448ad98cc75b1d5ea13089a030c3a0ff00c3"
       },
@@ -989,8 +989,8 @@
     },
     "Netflix": {
       "official": {
-        "netflix-service": "sha256:7b0ff979b67ebccc60e4c5cdf2e3f1a6df7a7d2010956650f10a137e1a353a0e",
-        "netflix-network-help": "sha256:259b1b9376d27211c33f57e738a90155fddfc4728e622665b66da17ebbdd0591",
+        "netflix-service": "sha256:2b82ad4c2f95561143f4b8fdec7c93e2eef72668442606d6ad1b9198cc61e75a",
+        "netflix-network-help": "sha256:b8ab98bab0f90ae98bd7eccc8a429481563283086b753812165519f83cba7d81",
         "netflix-open-connect": "sha256:e1ab54e5c18c001ba7a62f1f85dae3aa0c567858d590d3c329c1071882c7814b"
       },
       "community": {
@@ -2158,7 +2158,7 @@
     },
     "Disney": {
       "official": {
-        "disney-plus": "sha256:0edb0a3667b75524eaf4aada5d79e52975f0fe10a977dfd8ab978edb188df1b7"
+        "disney-plus": "sha256:d133b9a4274ba4e47d34d2d69a31fad3356255ab0e86f77cf2211acb41841a4f"
       },
       "community": {
         "sourceHash": "sha256:8a22e3e5ba10b3eaff64ccc3589d4a57d4a3295004e4df789a4ad6a9dd187c54",
@@ -2433,7 +2433,7 @@
     "Steam": {
       "official": {
         "steam-network-requirements": "sha256:9ae35da85bd75cd70057d9c170d36f0fef4fa8816d9af8f0b3ec84a90e9a7fb5",
-        "steam-service": "sha256:fcdc1e95af29541b3df05dbca467ded4c65189ccfc1c20f9be5c2167733297d0"
+        "steam-service": "sha256:5d7011b75dd6091a9973df1428567168425d5c9d9c8f13fb058183fd189274bd"
       },
       "community": {
         "sourceHash": "sha256:97a6968063c445c6592d4b43b7572c80708c1e29f1afc6f688b06b2ead4d6c80",
