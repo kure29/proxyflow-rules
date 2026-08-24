@@ -2158,7 +2158,7 @@
     },
     "Disney": {
       "official": {
-        "disney-plus": "sha256:d133b9a4274ba4e47d34d2d69a31fad3356255ab0e86f77cf2211acb41841a4f"
+        "disney-plus": "sha256:2e8bea7913125290bc1ee0135cc9a2dd2cee0c66704337df8f234948b3b77053"
       },
       "community": {
         "sourceHash": "sha256:8a22e3e5ba10b3eaff64ccc3589d4a57d4a3295004e4df789a4ad6a9dd187c54",
@@ -2433,7 +2433,7 @@
     "Steam": {
       "official": {
         "steam-network-requirements": "sha256:9ae35da85bd75cd70057d9c170d36f0fef4fa8816d9af8f0b3ec84a90e9a7fb5",
-        "steam-service": "sha256:5d7011b75dd6091a9973df1428567168425d5c9d9c8f13fb058183fd189274bd"
+        "steam-service": "sha256:adaad17ab0a32af6065d0ee21ff380faf5208d3947dcd7d8ceff0a343fbd3bbb"
       },
       "community": {
         "sourceHash": "sha256:97a6968063c445c6592d4b43b7572c80708c1e29f1afc6f688b06b2ead4d6c80",
