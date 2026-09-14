@@ -3,7 +3,7 @@
   "services": {
     "OpenAI": {
       "official": {
-        "openai-api-reference": "sha256:83caac2b6b5c5c88b8ad02eeec94125ded84566deb3cfbef43c796a3e0d98f34"
+        "openai-api-reference": "sha256:ddf19eeb33c74e78f27cef72e1c516770b7ad94beb39c7ab6ab4eb01c3df20b0"
       },
       "community": {
         "sourceHash": "sha256:e78442477c8c3d2f2ba34bc26443774014f328d5f1ff9761f0ea37dfc1fb7331",
@@ -48,8 +48,8 @@
     },
     "Claude": {
       "official": {
-        "anthropic-corporate-proxy": "sha256:8511001d318e79c25c865c784300ac86c47f89712e58af668c4fa653def75a26",
-        "anthropic-web-network": "sha256:9dfa3ca97e51118edab467ff9ed09a5e49fc18076a0ab3e5eedc496f2f86e008"
+        "anthropic-corporate-proxy": "sha256:ae7ded8148da69551ae000516f7d96a60ee4f2c378a9be7f87f0e6780639785e",
+        "anthropic-web-network": "sha256:48f889be1308314b641e8e5c86281e768f74128ae70b5047263056c8ed6d760a"
       },
       "community": {
         "sourceHash": "sha256:c196c22a53e1ce7b7444eb87b67141c27174269dc0ea66ba8a2f8dc4fde34605",
@@ -770,7 +770,7 @@
     },
     "Gemini": {
       "official": {
-        "gemini-api-reference": "sha256:131ff6b1fd37e1cd596895ba3b3a9b4c0b08bd911bc1988038e6e456c90d016b"
+        "gemini-api-reference": "sha256:e2c6cdbc255afd98f191328dafb85b233924c40891882a63aa2c109de374d9cd"
       },
       "community": {
         "sourceHash": "sha256:2775cd09a1119bc0b81a5930c1ae624f492b41a8bcc6be3002f9c125c0cc1eef",
@@ -796,7 +796,7 @@
       "official": {
         "youtube-web": "sha256:09b49b6f2ee081211cbb9d653a0243d89da289129ca73e6977f3446be15d2d69",
         "youtube-embed": "sha256:a8fa5e10bfd1e49e5ae412efb96ae435c954ccb620753d2814d8895f0d854aff",
-        "youtube-api": "sha256:e96ff8e2bdc004770939572f4dc4448ad98cc75b1d5ea13089a030c3a0ff00c3"
+        "youtube-api": "sha256:2548b94db927cc53385768b25c6e852048223c65f73286a353aa4285699d0f52"
       },
       "community": {
         "sourceHash": "sha256:5d89aabf6a90ed785a6498a7200d9204c6d7bac2ba2704c7c7944c7ebb2be5cc",
@@ -989,7 +989,7 @@
     },
     "Netflix": {
       "official": {
-        "netflix-service": "sha256:2b82ad4c2f95561143f4b8fdec7c93e2eef72668442606d6ad1b9198cc61e75a",
+        "netflix-service": "sha256:d30e9d208c423af39781be6591c9b664b7e27e6e019d6ddac21069c7a4205911",
         "netflix-network-help": "sha256:b8ab98bab0f90ae98bd7eccc8a429481563283086b753812165519f83cba7d81",
         "netflix-open-connect": "sha256:e1ab54e5c18c001ba7a62f1f85dae3aa0c567858d590d3c329c1071882c7814b"
       },
@@ -2158,7 +2158,7 @@
     },
     "Disney": {
       "official": {
-        "disney-plus": "sha256:2e8bea7913125290bc1ee0135cc9a2dd2cee0c66704337df8f234948b3b77053"
+        "disney-plus": "sha256:6f4e6078f4eb6eedae50212d2e3cbe0d5c9eb4b2cae6af5fc6a364048cfea56a"
       },
       "community": {
         "sourceHash": "sha256:8a22e3e5ba10b3eaff64ccc3589d4a57d4a3295004e4df789a4ad6a9dd187c54",
@@ -2341,7 +2341,7 @@
     },
     "Telegram": {
       "official": {
-        "telegram-service": "sha256:7947ca60cbac3fb2173538f3762f243db2a466f05497d6dbd33e40726980a70e",
+        "telegram-service": "sha256:b4eb9f5632afd6397e104ed9542b72144d49e2d60268b6e59368e084c8f70fac",
         "telegram-cidr": "sha256:2459496ee558ce7da30aa9e73e086a07329bff862b3c03b77c4e50ea556702d3",
         "telegram-datacenters": "sha256:0fbf2abe554754acd42c498c2f5dda1d173471bbfe9e704daadc23ccecceef09"
       },
@@ -2389,8 +2389,8 @@
     },
     "GitHub": {
       "official": {
-        "github-restricted-network": "sha256:d1378d927277a9c2698aa9496cfd4c79fa9c103bf0636b28e8a32533e433bb02",
-        "github-meta": "sha256:abcdd6e93dbcfd6cb3120e29f4b1d866c1044d8fbdde3850451b2cd2b8ce2d7f"
+        "github-restricted-network": "sha256:4965564edc060d3b08006922f708996547e2224afa4dfa3918a6cd648258a6d9",
+        "github-meta": "sha256:272055e840d1333684b46122513badc68eb02c1d693a22e4a07675f77bf7a521"
       },
       "community": {
         "sourceHash": "sha256:89625ecc8fb195bead80cbe96120b8eee2a5ce9a0042b3f3a9a92d88e5ff25ee",
@@ -2433,7 +2433,7 @@
     "Steam": {
       "official": {
         "steam-network-requirements": "sha256:9ae35da85bd75cd70057d9c170d36f0fef4fa8816d9af8f0b3ec84a90e9a7fb5",
-        "steam-service": "sha256:adaad17ab0a32af6065d0ee21ff380faf5208d3947dcd7d8ceff0a343fbd3bbb"
+        "steam-service": "sha256:f87cb10e28adfa88c15d7345c07499b29da8ad0131eda5963197786f4ac8dcaf"
       },
       "community": {
         "sourceHash": "sha256:97a6968063c445c6592d4b43b7572c80708c1e29f1afc6f688b06b2ead4d6c80",
